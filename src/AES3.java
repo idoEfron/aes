@@ -43,17 +43,21 @@ public class AES3 {
 
         byte[][] solutionArray = new byte[4][4];
 
-        int cell = 0;
-        for (int i=0;i<4;i++){
-            for (int j = 0; j < 4; j++) {
-                solutionArray[j][i] = (byte) (bytesArray[j][i]^key1[j][i]);
-            }
-        }
+        xorAction(solutionArray,bytesArray,key1);
+
         solution = extractMatrix(solutionArray);
 
         return solution;
 
 
+    }
+
+    private void xorAction(byte[][] solutionArray, byte[][] bytesArray, byte[][] key){
+        for (int i=0;i<4;i++){
+            for (int j = 0; j < 4; j++) {
+                solutionArray[j][i] = (byte) (bytesArray[j][i]^key[j][i]);
+            }
+        }
     }
 
     private byte[][] fillmatrix(byte[] message) {

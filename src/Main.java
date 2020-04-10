@@ -1,9 +1,21 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String arge[]){
+        AES3 aes = new AES3();
+        try {
+            aes.encrypt("C:\\Users\\yinon\\IdeaProjects\\aes\\src\\key_long","C:\\Users\\yinon\\IdeaProjects\\aes\\src\\message_long", "C:\\Users\\yinon\\IdeaProjects\\aes\\src\\cipher.txt");
+        } catch (IOException e) {
+            System.out.println("encryption failed");
+        }
+        try {
+            aes.decrypt("/key_long","/cipher_long", "/plain.txt");
+        } catch (IOException e) {
+            System.out.println("plain failed");
+        }
         Scanner in = new Scanner(System.in);
         String []arrManu = new String[]{"-e", "-d", "-b"};
         for (int i = 0; i <arrManu.length; i++)
@@ -76,6 +88,7 @@ public class Main {
         System.out.println("Bye-bye!");
 
       }
+
       public static void choose(){
           String []subMenuE = new String[]{"-k", "-i", "-o"};
           for (int i = 0; i <subMenuE.length; i++)

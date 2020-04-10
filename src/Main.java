@@ -1,7 +1,5 @@
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String arge[]) {
@@ -22,16 +20,26 @@ public class Main {
 
             int[] tmp = new int[shift];
             for (int i = 0; i < shift; i++) {
-                tmp[i] = array[i][row];
+                tmp[i] = array[3-i][row];
             }
             // shift like normal
-            for (int col = 0; col < rowLength - shift; col++) {
-                array[col][row] = array[col + shift][row];
+            for (int col = 3; col >0; col--) {
+                if(col-shift>=0) {
+                    array[col][row] = array[col - shift][row];
+                }
             }
 
-            // copy back the "fallen off" elements
+            // copy back the "falle
+            // n off" elements
+            int n=tmp.length;
+            int[] b = new int[tmp.length];
+            int j = tmp.length;
+            for (int i = 0; i < n; i++) {
+                b[j - 1] = tmp[i];
+                j = j - 1;
+            }
             for (int i = 0; i < shift; i++) {
-                array[i + (rowLength - shift)][row] = tmp[i];
+                array[i][row] = b[i];
             }
         }
         /*
@@ -49,13 +57,14 @@ public class Main {
             }
         }
         */
+        /*
         for (int[] row : array) {
             for (int col : row) {
                 System.out.print(" " + col);
             }
             System.out.println();
         }
-
+*/
 
         AES3 aes = new AES3();
         try {
@@ -64,7 +73,7 @@ public class Main {
             System.out.println("encryption failed");
         }
         try {
-            aes.decrypt("/key_long", "/cipher_long", "/plain.txt");
+            aes.decrypt("C:\\Users\\user\\Desktop\\aes\\src\\key_long", "C:\\Users\\user\\Desktop\\aes\\src\\cipher_long", "C:\\Users\\user\\Desktop\\aes\\src\\plain.txt");
         } catch (IOException e) {
             System.out.println("plain failed");
         }

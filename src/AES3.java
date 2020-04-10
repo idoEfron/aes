@@ -3,9 +3,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AES3 {
-
 
 
     public AES3() {
@@ -20,11 +21,13 @@ public class AES3 {
 
         path = Paths.get(keysPath);
         byte[] keys = Files.readAllBytes(path);
-        byte[][] key1 = fillmatrix(keys);
+        byte[][] key1 = fillmatrix(keys,0);
+        byte[][] key2 = fillmatrix(keys,16);
+        byte[][] key3 = fillmatrix(keys,32);
 
-        firstIteration(message,key1);
-
-
+        cipherText = iteration(message,key1);
+        cipherText = iteration(cipherText,key2);
+        cipherText = iteration(cipherText,key3);
 
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             fos.write(cipherText);
@@ -35,23 +38,61 @@ public class AES3 {
 
     }
 
-    private byte[] firstIteration(byte[] message, byte[][] key1) {
-        byte[] solution = null;
+    private byte[] iteration(byte[] message, byte[][] key1) {
 
-        //fill matrix
-        byte[][] bytesArray = fillmatrix(message);
+        List<Byte> solution = new ArrayList<>();
 
-        byte[][] solutionArray = new byte[4][4];
+        int matrices = (message.length)/16;
+        for(int i=0;i<matrices;i++){
+            //fill matrix
+            byte[][] bytesArray = fillmatrix(message,i*16);
 
-        xorAction(solutionArray,bytesArray,key1);
+            byte[][] solutionArray = new byte[4][4];
 
-        solution = extractMatrix(solutionArray);
+            bytesArray=shiftUp(bytesArray);
 
-        return solution;
+            xorAction(solutionArray,bytesArray,key1);
 
+            solution.addAll(extractMatrix(solutionArray));
+        }
+
+        //copy final array
+        byte[] solutionFinal = new byte[message.length];
+        for(int i=0; i<solution.size();i++){
+            solutionFinal[i]= solution.get(i);
+        }
+
+        return  solutionFinal;
 
     }
 
+    private byte[] DeIteration(byte[] message, byte[][] key1) {
+
+        List<Byte> solution = new ArrayList<>();
+
+        int matrices = (message.length)/16;
+        for(int i=0;i<matrices;i++){
+            //fill matrix
+            byte[][] bytesArray = fillmatrix(message,i*16);
+
+            byte[][] solutionArray = new byte[4][4];
+
+            xorAction(solutionArray,bytesArray,key1);
+
+            bytesArray=shiftDown(solutionArray);
+
+            solution.addAll(extractMatrix(bytesArray));
+        }
+
+        //copy final array
+        byte[] solutionFinal = new byte[message.length];
+        for(int i=0; i<solution.size();i++){
+            solutionFinal[i]= solution.get(i);
+        }
+
+        return  solutionFinal;
+
+    }
     private void xorAction(byte[][] solutionArray, byte[][] bytesArray, byte[][] key){
         for (int i=0;i<4;i++){
             for (int j = 0; j < 4; j++) {
@@ -60,44 +101,55 @@ public class AES3 {
         }
     }
 
-    private byte[][] fillmatrix(byte[] message) {
+    public void printArray(byte[][] array){
+        for (byte[] row : array) {
+            for (byte col : row) {
+                System.out.print(" " + (int) col);
+            }
+            System.out.println();
+        }
+    }
+
+    private byte[][] fillmatrix(byte[] message,int start) {
         byte[][] bytesArray;
         bytesArray = new byte[4][4];
-        int messageCell =0;
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++){
-                bytesArray[j][i] = message[messageCell];
-                messageCell++;
+                bytesArray[j][i] = message[start];
+                start++;
             }
         }
         return bytesArray;
     }
 
-    private byte[] extractMatrix(byte[][] matrix) {
-        byte[] bytesArray;
-        bytesArray = new byte[16];
-        int messageCell =0;
+    private List<Byte> extractMatrix(byte[][] matrix) {
+        List<Byte> bytesArray;
+        bytesArray = new ArrayList<>();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++){
-                bytesArray[messageCell] = matrix[j][i];
-                messageCell++;
+                bytesArray.add(matrix[j][i]);
             }
         }
+
         return bytesArray;
     }
 
     public void decrypt(String keysPath, String messagePath, String outputFile) throws IOException {
 
-        byte[] plainText = null;
-
         Path path = Paths.get(messagePath);
         byte[] message = Files.readAllBytes(path);
 
+        byte[] plainText = new byte[message.length];
+
         path = Paths.get(keysPath);
         byte[] keys = Files.readAllBytes(path);
+        byte[][] key1 = fillmatrix(keys,0);
+        byte[][] key2 = fillmatrix(keys,16);
+        byte[][] key3 = fillmatrix(keys,32);
 
-
-        path = Paths.get(outputFile);
+        plainText = DeIteration(message,key3);
+        plainText = DeIteration(plainText,key2);
+        plainText = DeIteration(plainText,key1);
 
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             fos.write(plainText);
@@ -106,7 +158,9 @@ public class AES3 {
             System.out.println("error occured.");
         }
     }
-    public byte[][] shift(byte[][]array){
+
+
+    public byte[][] shiftUp(byte[][]array){
         for (int row = 0; row < array.length; row++) {
             int rowLength = array[row].length;
 
@@ -129,4 +183,38 @@ public class AES3 {
         }
         return array;
     }
-}
+
+
+
+    public byte[][] shiftDown(byte[][]array) {
+
+        for (int row = 0; row < array.length; row++) {
+            int rowLength = array[row].length;
+            // keep shift within bounds of the array
+            int shift = row % 4;
+            Byte[] tmp = new Byte[shift];
+            for (int i = 0; i < shift; i++) {
+                tmp[i] = array[3-i][row];
+            }
+            // shift like normal
+            for (int col = 3; col >0; col--) {
+                if(col-shift>=0) {
+                    array[col][row] = array[col - shift][row];
+                }
+            }
+            // copy back the "falle
+            // n off" elements
+            int n=tmp.length;
+            Byte[] b = new Byte[tmp.length];
+            int j = tmp.length;
+            for (int i = 0; i < n; i++) {
+                b[j - 1] = tmp[i];
+                j = j - 1;
+            }
+            for (int i = 0; i < shift; i++) {
+                array[i][row] = b[i];
+            }
+        }
+        return array;
+    }
+    }

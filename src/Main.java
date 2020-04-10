@@ -30,12 +30,12 @@ public class Main {
             }
         }
         */
-        for (int[] row : array) {
+        /*for (int[] row : array) {
             for (int col : row) {
                 System.out.print(" " + col);
             }
             System.out.println();
-        }
+        }*/
 
 
 

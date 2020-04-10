@@ -5,6 +5,46 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String arge[]){
+
+
+
+        int[][] array = new int[][] {
+                {1,2,3,4},
+                {5,6,7,8},
+                {9,10,11,12},
+                {13,14,15,16}
+
+        };
+        /*
+        for(int i=0;i<4;i++){
+            for(int j=0;j<4;j++){
+                if(j!=0){
+                    byte []temp = new byte[4];
+                    int shift = j % 4;
+                    int[] tmp = new int[shift];
+                    for (int k = 0; k < shift; k++) {
+                        tmp[k] = array[j][i];
+                    }
+                }
+
+            }
+        }
+        */
+        for (int[] row : array) {
+            for (int col : row) {
+                System.out.print(" " + col);
+            }
+            System.out.println();
+        }
+
+
+
+
+
+
+
+
+
         AES3 aes = new AES3();
         try {
             aes.encrypt("C:\\Users\\yinon\\IdeaProjects\\aes\\src\\key_long","C:\\Users\\yinon\\IdeaProjects\\aes\\src\\message_long", "C:\\Users\\yinon\\IdeaProjects\\aes\\src\\cipher.txt");

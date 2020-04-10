@@ -1,4 +1,3 @@
-import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -84,6 +83,11 @@ public class AES3 {
                 messageCell++;
             }
         }
+        /******
+         *
+         *
+         */
+
         return bytesArray;
     }
 
@@ -107,5 +111,27 @@ public class AES3 {
             System.out.println("error occured.");
         }
     }
+    public byte[][] shift(byte[][]array){
+        for (int row = 0; row < array.length; row++) {
+            int rowLength = array[row].length;
 
+            // keep shift within bounds of the array
+            int  shift= row % 4;
+
+            byte[] tmp = new byte[shift];
+            for (int i = 0; i < shift; i++) {
+                tmp[i] = array[i][row];
+            }
+            // shift like normal
+            for (int col = 0; col < rowLength - shift; col++) {
+                array[col][row] = array[col+shift][row];
+            }
+
+            // copy back the "fallen off" elements
+            for (int i = 0; i < shift; i++) {
+                array[i + (rowLength - shift)][row] = tmp[i];
+            }
+        }
+        return array;
+    }
 }

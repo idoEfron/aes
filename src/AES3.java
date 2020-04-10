@@ -83,11 +83,6 @@ public class AES3 {
                 messageCell++;
             }
         }
-        /******
-         *
-         *
-         */
-
         return bytesArray;
     }
 

@@ -4,10 +4,7 @@ import java.util.*;
 public class Main {
     public static void main(String arge[]) throws IOException {
 
-
-
         AES3 aes = new AES3();
-
         Scanner in = new Scanner(System.in);
         String[] arrManu = new String[]{"-e", "-d", "-b"};
         for (int i = 0; i < arrManu.length; i++)
@@ -69,13 +66,13 @@ public class Main {
                                 break;
                             default:
                                 System.out.println("Invalid choice.");
-
                         }
                         if(m!=null&&c!=null&&o!=null){
                             quitSub=true;
                         }
                     } while (!quitSub);
 
+                    aes.attack(m,c,o);
                     System.out.println("the end of break");
                     break;
 
@@ -86,11 +83,8 @@ public class Main {
             }
 
         } while (!quit);
-
         System.out.println("Bye-bye!");
-
     }
-
 
     private static List<String> choose() {
 

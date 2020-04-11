@@ -2,8 +2,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class Main {
-    public static String k;
-
     public static void main(String arge[]) throws IOException {
 
 
@@ -73,7 +71,7 @@ public class Main {
                                 System.out.println("Invalid choice.");
 
                         }
-                        if(k!=null&&c!=null&&o!=null){
+                        if(m!=null&&c!=null&&o!=null){
                             quitSub=true;
                         }
                     } while (!quitSub);

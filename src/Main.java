@@ -7,7 +7,6 @@ public class Main {
 
 
         AES3 aes = new AES3();
-
         Scanner in = new Scanner(System.in);
         String[] arrManu = new String[]{"-e", "-d", "-b"};
         for (int i = 0; i < arrManu.length; i++)

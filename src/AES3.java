@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,58 @@ public class AES3 {
 
 
     public AES3() {
+    }
+
+
+    private List<byte[]> randomizeKeys(){
+        List<byte[]> keys = new ArrayList<>();
+        SecureRandom random = new SecureRandom();
+        byte[] key1 = new byte[16]; // 128 bits are converted to 16 bytes;
+        random.nextBytes(key1);
+        byte[] key2 = new byte[16]; // 128 bits are converted to 16 bytes;
+        random.nextBytes(key2);
+
+        keys.add(key1);
+        keys.add(key2);
+
+        return keys;
+    }
+
+    public void attack(String messagePath,String cipherPath, String output) throws IOException {
+        Path path = Paths.get(messagePath);
+        byte[] message = Files.readAllBytes(path);
+
+        List<byte[]> keys = randomizeKeys();
+
+        byte[][] key1 =  fillmatrix(keys.get(0),0);
+        byte[][] key2 =  fillmatrix(keys.get(1),0);
+
+        byte[] mid_cipher = iteration(message,key1);
+        mid_cipher = iteration(mid_cipher,key2);
+
+        byte[][] mid_cipherBlock = fillmatrix(mid_cipher,0);
+
+        path = Paths.get(cipherPath);
+        byte[] cipher = Files.readAllBytes(path);
+
+        byte[][] cipherBlock = fillmatrix(cipher,0);
+
+        byte[][] key3 = new byte[4][4];
+
+        shiftUp(mid_cipherBlock);
+        xorAction(key3,mid_cipherBlock,cipherBlock);
+
+        byte[] solution = iteration(message,key1);
+        solution = iteration(solution,key2);
+        solution = iteration(solution,key3);
+
+        for(int i=0;i<solution.length;i++){
+            if(Byte.compare(solution[i],cipher[i]) !=0){
+                System.out.println(i +"is incorrect");
+            }
+        }
+        int k =0;
+
     }
 
     public void encrypt(String keysPath, String messagePath, String outputFile) throws IOException {

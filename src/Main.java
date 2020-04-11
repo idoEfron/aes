@@ -77,6 +77,11 @@ public class Main {
         } catch (IOException e) {
             System.out.println("plain failed");
         }
+        try {
+            aes.attack("C:\\Users\\yinon\\IdeaProjects\\aes\\src\\message_long", "C:\\Users\\yinon\\IdeaProjects\\aes\\src\\cipher_long", "C:\\Users\\yinon\\IdeaProjects\\aes\\src\\key3.txt");
+        } catch (IOException e) {
+            System.out.println("encryption failed");
+        }
         Scanner in = new Scanner(System.in);
         String[] arrManu = new String[]{"-e", "-d", "-b"};
         for (int i = 0; i < arrManu.length; i++)

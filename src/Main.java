@@ -19,29 +19,22 @@ public class Main {
             switch (menuItem) {
 
                 case "-e":
-
-                    System.out.println("You've chosen item #1");
                     strArr = new ArrayList<>();
                     strArr =choose();
                     aes.encrypt(strArr.get(0),strArr.get(1),strArr.get(2));
                     quit=true;
-                    System.out.println("the end of encrypt");
                     break;
 
                 case "-d":
 
-                    System.out.println("You've chosen item #2");
                     strArr = new ArrayList<>();
                     strArr =choose();
                     aes.decrypt(strArr.get(0) ,strArr.get(1),strArr.get(2));
                     quit=true;
-                    System.out.println("the end of decrypt");
                     break;
 
                 case "-b":
-
-                    System.out.println("You've chosen item #3");
-
+                    
                     boolean quitSub = false;
                     String SubmenuItem;
                     String m = null;
@@ -74,7 +67,6 @@ public class Main {
 
                     aes.attack(m,c,o);
                     quit=true;
-                    System.out.println("the end of break");
                     break;
 
                 default:
@@ -84,7 +76,6 @@ public class Main {
             }
 
         } while (!quit);
-        System.out.println("Bye-bye!");
     }
 
     private static List<String> choose() {

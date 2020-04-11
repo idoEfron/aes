@@ -186,7 +186,19 @@ public class AES3 {
 
         return bytesArray;
     }
+/*
+C:/Users/user/Desktop/aes/src/key_long
+C:/Users/user/Desktop/aes/src/cipher_long
+C:/Users/user/Desktop/aes/src/plain_long.txt
 
+ */
+    /**
+     *
+     * @param keysPath
+     * @param messagePath
+     * @param outputFile
+     * @throws IOException
+     */
     public void decrypt(String keysPath, String messagePath, String outputFile) throws IOException {
 
         Path path = Paths.get(messagePath);
@@ -210,6 +222,8 @@ public class AES3 {
         catch (Exception e){
             System.out.println("error occured.");
         }
+        path = Paths.get(messagePath);
+        byte[] temppp = Files.readAllBytes(path);
     }
 
 

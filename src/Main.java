@@ -2,86 +2,12 @@ import java.io.IOException;
 import java.util.*;
 
 public class Main {
-    public static void main(String arge[]) {
+    public static void main(String arge[]) throws IOException {
 
 
-        int[][] array = new int[][]{
-                {1, 2, 3, 4},
-                {5, 6, 7, 8},
-                {9, 10, 11, 12},
-                {13, 14, 15, 16}
-
-        };
-        for (int row = 0; row < array.length; row++) {
-            int rowLength = array[row].length;
-
-            // keep shift within bounds of the array
-            int shift = row % 4;
-
-            int[] tmp = new int[shift];
-            for (int i = 0; i < shift; i++) {
-                tmp[i] = array[3-i][row];
-            }
-            // shift like normal
-            for (int col = 3; col >0; col--) {
-                if(col-shift>=0) {
-                    array[col][row] = array[col - shift][row];
-                }
-            }
-
-            // copy back the "falle
-            // n off" elements
-            int n=tmp.length;
-            int[] b = new int[tmp.length];
-            int j = tmp.length;
-            for (int i = 0; i < n; i++) {
-                b[j - 1] = tmp[i];
-                j = j - 1;
-            }
-            for (int i = 0; i < shift; i++) {
-                array[i][row] = b[i];
-            }
-        }
-        /*
-        for(int i=0;i<4;i++){
-            for(int j=0;j<4;j++){
-                if(j!=0){
-                    byte []temp = new byte[4];
-                    int shift = j % 4;
-                    int[] tmp = new int[shift];
-                    for (int k = 0; k < shift; k++) {
-                        tmp[k] = array[j][i];
-                    }
-                }
-
-            }
-        }
-        */
-        /*
-        for (int[] row : array) {
-            for (int col : row) {
-                System.out.print(" " + col);
-            }
-            System.out.println();
-        }
-*/
 
         AES3 aes = new AES3();
-        try {
-            aes.encrypt("C:\\Users\\yinon\\IdeaProjects\\aes\\src\\key_long", "C:\\Users\\yinon\\IdeaProjects\\aes\\src\\message_long", "C:\\Users\\yinon\\IdeaProjects\\aes\\src\\cipher.txt");
-        } catch (IOException e) {
-            System.out.println("encryption failed");
-        }
-        try {
-            aes.decrypt("C:\\Users\\user\\Desktop\\aes\\src\\key_long", "C:\\Users\\user\\Desktop\\aes\\src\\cipher_long", "C:\\Users\\user\\Desktop\\aes\\src\\plain.txt");
-        } catch (IOException e) {
-            System.out.println("plain failed");
-        }
-        try {
-            aes.attack("C:\\Users\\yinon\\IdeaProjects\\aes\\src\\message_long", "C:\\Users\\yinon\\IdeaProjects\\aes\\src\\cipher_long", "C:\\Users\\yinon\\IdeaProjects\\aes\\src\\key3.txt");
-        } catch (IOException e) {
-            System.out.println("encryption failed");
-        }
+
         Scanner in = new Scanner(System.in);
         String[] arrManu = new String[]{"-e", "-d", "-b"};
         for (int i = 0; i < arrManu.length; i++)
@@ -89,7 +15,7 @@ public class Main {
 
         boolean quit = false;
         String menuItem;
-
+        List<String> strArr=null;
         do {
             menuItem = in.nextLine();
 
@@ -98,22 +24,26 @@ public class Main {
                 case "-e":
 
                     System.out.println("You've chosen item #1");
-                    choose();
+                    strArr = new ArrayList<>();
+                    strArr =choose();
+                    aes.encrypt(strArr.get(0),strArr.get(1),strArr.get(2));
+                    quit=true;
+                    System.out.println("the end of encrypt");
                     break;
 
                 case "-d":
 
                     System.out.println("You've chosen item #2");
-                    choose();
+                    strArr = new ArrayList<>();
+                    strArr =choose();
+                    aes.decrypt(strArr.get(0) ,strArr.get(1),strArr.get(2));
+                    quit=true;
+                    System.out.println("the end of decrypt");
                     break;
 
                 case "-b":
 
                     System.out.println("You've chosen item #3");
-
-                    String[] subMenuE = new String[]{"-m", "-c", "-o"};
-                    for (int i = 0; i < subMenuE.length; i++)
-                        System.out.println(subMenuE[i]);
 
                     boolean quitSub = false;
                     String SubmenuItem;
@@ -121,27 +51,33 @@ public class Main {
                     String c = null;
                     String o = null;
                     do {
+                        String[] subMenuE = new String[]{"-m", "-c", "-o"};
+                        for (int i = 0; i < subMenuE.length; i++)
+                            System.out.println(subMenuE[i]);
                         Scanner inSub = new Scanner(System.in);
                         SubmenuItem = inSub.nextLine();
 
                         switch (SubmenuItem) {
                             case "-m":
+                                m=inSub.nextLine();
                                 break;
                             case "-c":
+                                c=inSub.nextLine();
                                 break;
                             case "-o":
+                                o=inSub.nextLine();
                                 break;
                             default:
-
                                 System.out.println("Invalid choice.");
 
                         }
+                        if(m!=null&&c!=null&&o!=null){
+                            quitSub=true;
+                        }
                     } while (!quitSub);
 
-                    System.out.println("Bye-bye!");
-
+                    System.out.println("the end of break");
                     break;
-
 
                 default:
 
@@ -155,7 +91,47 @@ public class Main {
 
     }
 
-    private static void choose() {
+
+    private static List<String> choose() {
+
+        boolean quitSub = false;
+        String SubmenuItem;
+        String k = null;
+        String i = null;
+        String o = null;
+        do {
+            String[] subMenuE = new String[]{"-k", "-i", "-o"};
+            for (int j = 0; j < subMenuE.length; j++)
+                System.out.println(subMenuE[j]);
+
+            Scanner inSub = new Scanner(System.in);
+            SubmenuItem = inSub.nextLine();
+
+            switch (SubmenuItem) {
+                case "-k":
+                    k=inSub.nextLine();
+                    break;
+                case "-i":
+                    i=inSub.nextLine();
+                    break;
+                case "-o":
+                    o=inSub.nextLine();
+                    break;
+                default:
+
+                    System.out.println("Invalid choice.");
+
+            }
+            if(k!=null&&i!=null&&o!=null){
+                quitSub=true;
+            }
+        } while (!quitSub);
+        List<String> listStr = new ArrayList<>();
+        listStr.add(k);
+        listStr.add(i);
+        listStr.add(o);
+        return listStr;
+
     }
 }
 

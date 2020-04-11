@@ -47,21 +47,22 @@ public class AES3 {
 
         byte[][] cipherBlock = fillmatrix(cipher,0);
 
-        byte[][] key3 = new byte[4][4];
+        byte[][] key3matrice = new byte[4][4];
 
         shiftUp(mid_cipherBlock);
-        xorAction(key3,mid_cipherBlock,cipherBlock);
-
-        byte[] solution = iteration(message,key1);
-        solution = iteration(solution,key2);
-        solution = iteration(solution,key3);
-
-        for(int i=0;i<solution.length;i++){
-            if(Byte.compare(solution[i],cipher[i]) !=0){
-                System.out.println(i +"is incorrect");
-            }
+        xorAction(key3matrice,mid_cipherBlock,cipherBlock);
+        List<Byte> key3List = extractMatrix(key3matrice);
+        byte[] key3 = new byte[key3List.size()];
+        for(int i=0;i<key3.length;i++){
+            key3[i] = key3List.get(i);
         }
-        int k =0;
+
+        try (FileOutputStream fos = new FileOutputStream(output)) {
+            fos.write(key3);
+        }
+        catch (Exception e){
+            System.out.println("error occured.");
+        }
 
     }
 

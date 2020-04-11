@@ -73,6 +73,7 @@ public class Main {
                     } while (!quitSub);
 
                     aes.attack(m,c,o);
+                    quit=true;
                     System.out.println("the end of break");
                     break;
 

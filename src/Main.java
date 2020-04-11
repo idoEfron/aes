@@ -5,6 +5,17 @@ public class Main {
     public static void main(String arge[]) throws IOException {
 
         AES3 aes = new AES3();
+        if(arge[0].equals("-e")){
+        aes.encrypt(arge[2],arge[4],arge[6]);
+        }
+        if(arge[0].equals("-d")){
+            aes.decrypt(arge[2],arge[4],arge[6]);
+
+        }
+        if(arge[0].equals("-b")){
+            aes.attack(arge[2],arge[4],arge[6]);
+        }
+        /*
         Scanner in = new Scanner(System.in);
         String[] arrManu = new String[]{"-e", "-d", "-b"};
         for (int i = 0; i < arrManu.length; i++)
@@ -118,6 +129,8 @@ public class Main {
         listStr.add(o);
         return listStr;
 
+    }
+    */
     }
 }
 

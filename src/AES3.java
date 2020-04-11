@@ -135,8 +135,9 @@ public class AES3 {
     }
 /*
 C:/Users/user/Desktop/aes/src/key_long
-C:/Users/user/Desktop/aes/src/cipher_long
-C:/Users/user/Desktop/aes/src/plain_long.txt
+C:/Users/user/Desktop/aes/src/massage_long
+C:/Users/user/Desktop/aes/src/message_long
+C:/Users/user/Desktop/aes/src/cyyyy_long.txt
 
  */
     /**

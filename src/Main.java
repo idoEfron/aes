@@ -34,7 +34,7 @@ public class Main {
                     break;
 
                 case "-b":
-                    
+
                     boolean quitSub = false;
                     String SubmenuItem;
                     String m = null;

@@ -187,13 +187,7 @@ public class AES3 {
 
         return bytesArray;
     }
-/*
-C:/Users/user/Desktop/aes/src/key_long
-C:/Users/user/Desktop/aes/src/message_long
-C:/Users/user/Desktop/aes/src/keyyyyyyy3_long.txt
-C:/Users/user/Desktop/aes/src/cipher_long
 
- */
     /**
      *
      * @param keysPath
